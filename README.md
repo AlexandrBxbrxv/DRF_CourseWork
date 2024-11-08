@@ -10,6 +10,7 @@ DevLog
 
 `v0.1`
 1. Установлены библиотеки djangorestframework, flake8
+2. Добавлено приложение habits
 
 `v0`
 1. Установлены библиотеки django, python-dotenv, psycopg2

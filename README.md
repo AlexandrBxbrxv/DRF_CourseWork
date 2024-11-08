@@ -12,6 +12,7 @@ DevLog
 1. Установлены библиотеки djangorestframework, flake8, djangorestframework-simplejwt
 2. Добавлено приложение habits
 3. Добавлена модель Habit
+4. Реализованы логин и регистрация
 
 `v0`
 1. Установлены библиотеки django, python-dotenv, psycopg2

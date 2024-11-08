@@ -9,7 +9,7 @@
 DevLog
 
 `v0.1`
-1. Установлены библиотеки djangorestframework, flake8
+1. Установлены библиотеки djangorestframework, flake8, djangorestframework-simplejwt
 2. Добавлено приложение habits
 3. Добавлена модель Habit
 

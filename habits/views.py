@@ -41,3 +41,7 @@ class HabitUpdateAPIView(generics.UpdateAPIView):
     permission_classes = [IsAuthenticated, IsOwner]
 
 
+class HabitDestroyAPIView(generics.DestroyAPIView):
+    """Контроллер для удаления привычки текущего пользователя."""
+    queryset = Habit.objects.all()
+    permission_classes = [IsAuthenticated, IsOwner]

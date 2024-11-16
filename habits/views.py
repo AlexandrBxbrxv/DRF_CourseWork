@@ -34,3 +34,10 @@ class HabitRetrieveAPIView(generics.RetrieveAPIView):
     permission_classes = [IsAuthenticated, IsOwner]
 
 
+class HabitUpdateAPIView(generics.UpdateAPIView):
+    """Контроллер для обновления привычки текущего пользователя."""
+    serializer_class = HabitSerializer
+    queryset = Habit.objects.all()
+    permission_classes = [IsAuthenticated, IsOwner]
+
+

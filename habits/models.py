@@ -21,12 +21,13 @@ class Habit(models.Model):
     time = models.TimeField(verbose_name='время')
     action = models.TextField(verbose_name='действие')
 
-    is_nice_habit = models.BooleanField(default=False, verbose_name='признак приятой привычки')
+    is_nice_habit = models.BooleanField(default=False, verbose_name='признак приятной привычки')
     associated_habit = models.ForeignKey("Habit", on_delete=models.SET_NULL, **NULLABLE, related_name='nice_habit',
                                          verbose_name='связанная привычка')
     periodicity = models.CharField(max_length=5, choices=PERIODICITY_CHOICES, verbose_name='периодичность')
     reward = models.TextField(**NULLABLE, verbose_name='вознаграждение')
-    time_for_execution = models.TimeField(verbose_name='время на выполнение')
+    time_for_execution = models.PositiveSmallIntegerField(default=120, help_text='время на выполнение в секундах',
+                                                          verbose_name='время на выполнение')
     is_public = models.BooleanField(default=False, verbose_name='признак публичности')
 
     def __str__(self):

@@ -8,6 +8,12 @@
 
 DevLog
 
+`v0.2`
+1. Установлена библиотека coverage
+2. Реализован валидатор для Habit
+3. CRUD для Habit
+4. Валидация Habit покрыта тестами.
+
 `v0.1`
 1. Установлены библиотеки djangorestframework, flake8, djangorestframework-simplejwt
 2. Добавлено приложение habits

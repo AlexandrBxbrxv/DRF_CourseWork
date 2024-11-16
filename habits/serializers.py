@@ -1,17 +1,16 @@
 from rest_framework import serializers
 
 from habits.models import Habit
-
-
-class AssociatedHabitSerializer(serializers.ModelSerializer):
-    """Сериализатор связанной привычки для модели Habit."""
-    class Meta:
-        model = Habit
-        exclude = ('reward',)
+from habits.validators import HabitValidator
 
 
 class HabitSerializer(serializers.ModelSerializer):
     """Сериализатор для модели Habit."""
+
     class Meta:
         model = Habit
-        exclude = ('is_nice_habit',)
+        fields = '__all__'
+        read_only_fields = ('user',)
+        validators = [
+            HabitValidator()
+        ]

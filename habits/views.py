@@ -7,6 +7,7 @@ from habits.serializers import HabitSerializer
 from users.permissions import IsOwner
 
 
+# CRUD для Habit ####################################################
 class HabitCreateAPIView(generics.CreateAPIView):
     """Контроллер для создания привычки."""
     serializer_class = HabitSerializer
@@ -17,6 +18,12 @@ class HabitCreateAPIView(generics.CreateAPIView):
         habit = serializer.save()
         habit.user = user
         habit.save()
+
+
+class AllHabitListAPIView(generics.ListAPIView):
+    """Контроллер для просмотра привычек всех пользователей."""
+    serializer_class = HabitSerializer
+    queryset = Habit.objects.all()
 
 
 class HabitListAPIView(generics.ListAPIView):

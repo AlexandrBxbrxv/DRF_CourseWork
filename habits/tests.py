@@ -8,10 +8,6 @@ from users.models import User
 class HabitAPITestCase(APITestCase):
 
     def setUp(self) -> None:
-
-        User.objects.all().delete()
-        Habit.objects.all().delete()
-
         self.user = User.objects.create(
             email='user@test.com',
             password='test'
@@ -348,6 +344,7 @@ class HabitAPITestCase(APITestCase):
             response.status_code,
             status.HTTP_200_OK
         )
+        print(response.json())
 
         self.assertEqual(
             response.json(),
@@ -357,7 +354,7 @@ class HabitAPITestCase(APITestCase):
                 "previous": None,
                 "results": [
                     {
-                        "id": 32,
+                        "id": 36,
                         "place": "test",
                         "time": "12:00:00",
                         "action": "test",
@@ -366,11 +363,11 @@ class HabitAPITestCase(APITestCase):
                         "reward": None,
                         "time_for_execution": 120,
                         "is_public": False,
-                        "user": 15,
-                        "associated_habit": 31
+                        "user": 17,
+                        "associated_habit": 35
                     },
                     {
-                        "id": 31,
+                        "id": 35,
                         "place": "test",
                         "time": "12:02:00",
                         "action": "test",
@@ -379,9 +376,80 @@ class HabitAPITestCase(APITestCase):
                         "reward": None,
                         "time_for_execution": 60,
                         "is_public": False,
-                        "user": 15,
+                        "user": 17,
                         "associated_habit": None
                     }
                 ]
             }
+        )
+
+    def test_list_all_habits(self):
+        """Просмотр списка привычек всех пользователей."""
+
+        response = self.client.get(
+            '/habits/all_habit/list/',
+            format='json'
+        )
+
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_200_OK
+        )
+
+        self.assertEqual(
+            response.json(),
+            [
+                {
+                    "id": 32,
+                    "place": "test",
+                    "time": "12:00:00",
+                    "action": "test",
+                    "is_nice_habit": False,
+                    "periodicity": "1_day",
+                    "reward": None,
+                    "time_for_execution": 120,
+                    "is_public": False,
+                    "user": 15,
+                    "associated_habit": 31
+                },
+                {
+                    "id": 31,
+                    "place": "test",
+                    "time": "12:02:00",
+                    "action": "test",
+                    "is_nice_habit": True,
+                    "periodicity": "1_day",
+                    "reward": None,
+                    "time_for_execution": 60,
+                    "is_public": False,
+                    "user": 15,
+                    "associated_habit": None
+                },
+                {
+                    "id": 34,
+                    "place": "test",
+                    "time": "12:00:00",
+                    "action": "test",
+                    "is_nice_habit": False,
+                    "periodicity": "1_day",
+                    "reward": None,
+                    "time_for_execution": 120,
+                    "is_public": False,
+                    "user": 16,
+                    "associated_habit": 33
+                },
+                {
+                    "id": 33,
+                    "place": "test",
+                    "time": "12:02:00",
+                    "action": "test",
+                    "is_nice_habit": True,
+                    "periodicity": "1_day",
+                    "reward": None,
+                    "time_for_execution": 60,
+                    "is_public": False,
+                    "user": 16,
+                    "associated_habit": None
+                }
+            ]
         )

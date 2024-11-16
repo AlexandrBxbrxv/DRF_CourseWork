@@ -3,15 +3,12 @@ from rest_framework import serializers
 
 class HabitValidator:
     """Проверяет что поля associated_habit и reward не заполнены одновременно."""
-    def __init__(self, is_nice_habit, associated_habit, reward):
-        self.is_nice_habit = is_nice_habit
-        self.associated_habit = associated_habit
-        self.reward = reward
 
     def __call__(self, value):
-        self.is_nice_habit = dict(value).get(self.is_nice_habit)
-        self.associated_habit = dict(value).get(self.associated_habit)
-        self.reward = dict(value).get(self.reward)
+        self.is_nice_habit = dict(value).get("is_nice_habit")
+        self.associated_habit = dict(value).get("associated_habit")
+        self.reward = dict(value).get("reward")
+        self.time_for_execution = int(dict(value).get("time_for_execution"))
 
         if self.is_nice_habit:
             if self.associated_habit is not None:
@@ -26,3 +23,6 @@ class HabitValidator:
                 message = 'Привычка не может содержать и связанную привычку и вознаграждение одновременно.'
                 raise serializers.ValidationError(message)
 
+        if self.time_for_execution > 120:
+            message = 'Время на выполнение не должно превышать 120 секунд.'
+            raise serializers.ValidationError(message)

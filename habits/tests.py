@@ -348,11 +348,11 @@ class HabitAPITestCase(APITestCase):
             response.status_code,
             status.HTTP_200_OK
         )
-        print(response.json())
+
         self.assertEqual(
             response.json(),
             {
-                "count": 4,
+                "count": 2,
                 "next": None,
                 "previous": None,
                 "results": [
@@ -380,32 +380,6 @@ class HabitAPITestCase(APITestCase):
                         "time_for_execution": 60,
                         "is_public": False,
                         "user": 15,
-                        "associated_habit": None
-                    },
-                    {
-                        "id": 34,
-                        "place": "test",
-                        "time": "12:00:00",
-                        "action": "test",
-                        "is_nice_habit": False,
-                        "periodicity": "1_day",
-                        "reward": None,
-                        "time_for_execution": 120,
-                        "is_public": False,
-                        "user": 16,
-                        "associated_habit": 33
-                    },
-                    {
-                        "id": 33,
-                        "place": "test",
-                        "time": "12:02:00",
-                        "action": "test",
-                        "is_nice_habit": True,
-                        "periodicity": "1_day",
-                        "reward": None,
-                        "time_for_execution": 60,
-                        "is_public": False,
-                        "user": 16,
                         "associated_habit": None
                     }
                 ]

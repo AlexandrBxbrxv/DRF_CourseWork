@@ -303,3 +303,39 @@ class HabitAPITestCase(APITestCase):
         )
 
         self.assertTrue(not Habit.objects.filter(pk=3).exists())
+
+    def test_create_habit_with_habit(self):
+        """Создание полезной привычки не правильно, в поле associated_habit указана полезная, а не приятная привычка."""
+
+        self.client.force_authenticate(user=self.user)
+
+        data = {
+            "id": 3,
+            "place": "test",
+            "time": "12:00:00",
+            "action": "test",
+            "is_nice_habit": False,
+            "periodicity": "1_day",
+            "time_for_execution": 120,
+            "associated_habit": self.habit.pk
+        }
+
+        response = self.client.post(
+            '/habits/habit/create/',
+            data=data,
+            format='json'
+        )
+
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_400_BAD_REQUEST
+        )
+
+        self.assertEqual(
+            response.json(),
+            {
+                'non_field_errors': ['Связанная привычка должна ссылаться на приятную привычку.']
+            }
+        )
+
+        self.assertTrue(not Habit.objects.filter(pk=3).exists())

@@ -8,6 +8,10 @@ from users.models import User
 class HabitAPITestCase(APITestCase):
 
     def setUp(self) -> None:
+
+        User.objects.all().delete()
+        Habit.objects.all().delete()
+
         self.user = User.objects.create(
             email='user@test.com',
             password='test'
@@ -39,6 +43,37 @@ class HabitAPITestCase(APITestCase):
             is_public=False
         )
 
+        self.other_user = User.objects.create(
+            email='other_user@test.com',
+            password='test'
+        )
+
+        self.other_associated_habit = Habit.objects.create(
+            user=self.other_user,
+            place='test',
+            time='12:02:00',
+            action='test',
+            is_nice_habit=True,
+            associated_habit=None,
+            periodicity='1_day',
+            reward=None,
+            time_for_execution=60,
+            is_public=False
+        )
+
+        self.other_habit = Habit.objects.create(
+            user=self.other_user,
+            place='test',
+            time='12:00:00',
+            action='test',
+            is_nice_habit=False,
+            associated_habit=self.other_associated_habit,
+            periodicity='1_day',
+            reward=None,
+            time_for_execution=120,
+            is_public=False
+        )
+
         self.client = APIClient()
         self.client.force_authenticate(user=self.user)
 
@@ -46,7 +81,7 @@ class HabitAPITestCase(APITestCase):
         """Создание приятной привычки по-правильному."""
 
         data = {
-            "id": 3,
+            "id": 5,
             "place": "test",
             "time": "12:00:00",
             "action": "test",
@@ -69,7 +104,7 @@ class HabitAPITestCase(APITestCase):
         self.assertEqual(
             response.json(),
             {
-                "id": 3,
+                "id": 5,
                 "user": 1,
                 "place": "test",
                 "time": "12:00:00",
@@ -83,13 +118,13 @@ class HabitAPITestCase(APITestCase):
             }
         )
 
-        self.assertTrue(Habit.objects.filter(pk=3).exists())
+        self.assertTrue(Habit.objects.filter(pk=5).exists())
 
     def test_create_associated_habit_with_reward(self):
         """Создание приятной привычки не правильно, с наградой(reward)."""
 
         data = {
-            "id": 3,
+            "id": 5,
             "place": "test",
             "time": "12:00:00",
             "action": "test",
@@ -117,13 +152,13 @@ class HabitAPITestCase(APITestCase):
             }
         )
 
-        self.assertTrue(not Habit.objects.filter(pk=3).exists())
+        self.assertTrue(not Habit.objects.filter(pk=5).exists())
 
     def test_create_associated_habit_with_associated_habit(self):
         """Создание приятной привычки не правильно, со связанной привычкой(associated_habit)."""
 
         data = {
-            "id": 3,
+            "id": 5,
             "place": "test",
             "time": "12:00:00",
             "action": "test",
@@ -151,14 +186,14 @@ class HabitAPITestCase(APITestCase):
             }
         )
 
-        self.assertTrue(not Habit.objects.filter(pk=3).exists())
+        self.assertTrue(not Habit.objects.filter(pk=5).exists())
 
     def test_create_habit_with_associated_habit_and_reward(self):
         """Создание полезной привычки не правильно,
          со связанной привычкой(associated_habit) и вознаграждением(reward)."""
 
         data = {
-            "id": 3,
+            "id": 5,
             "place": "test",
             "time": "12:00:00",
             "action": "test",
@@ -193,7 +228,7 @@ class HabitAPITestCase(APITestCase):
         """Создание полезной привычки по-правильному."""
 
         data = {
-            "id": 10,
+            "id": 18,
             "place": "test",
             "time": "12:00:00",
             "action": "test",
@@ -217,8 +252,8 @@ class HabitAPITestCase(APITestCase):
         self.assertEqual(
             response.json(),
             {
-                "id": 10,
-                "user": self.user.pk,
+                "id": 18,
+                "user": 7,
                 "place": "test",
                 "time": "12:00:00",
                 "action": "test",
@@ -231,13 +266,13 @@ class HabitAPITestCase(APITestCase):
             }
         )
 
-        self.assertTrue(Habit.objects.filter(pk=10).exists())
+        self.assertTrue(Habit.objects.filter(pk=18).exists())
 
     def test_create_habit_time_for_execution_greater_then_120(self):
         """Создание полезной привычки, с временем на выполнение(time_for_execution) больше 120 секунд."""
 
         data = {
-            "id": 3,
+            "id": 5,
             "place": "test",
             "time": "12:00:00",
             "action": "test",
@@ -265,13 +300,13 @@ class HabitAPITestCase(APITestCase):
             }
         )
 
-        self.assertTrue(not Habit.objects.filter(pk=3).exists())
+        self.assertTrue(not Habit.objects.filter(pk=5).exists())
 
     def test_create_habit_with_habit(self):
         """Создание полезной привычки не правильно, в поле associated_habit указана полезная, а не приятная привычка."""
 
         data = {
-            "id": 3,
+            "id": 5,
             "place": "test",
             "time": "12:00:00",
             "action": "test",
@@ -299,7 +334,7 @@ class HabitAPITestCase(APITestCase):
             }
         )
 
-        self.assertTrue(not Habit.objects.filter(pk=3).exists())
+        self.assertTrue(not Habit.objects.filter(pk=5).exists())
 
     def test_list_users_habits(self):
         """Просмотр списка привычек пользователя."""
@@ -313,16 +348,16 @@ class HabitAPITestCase(APITestCase):
             response.status_code,
             status.HTTP_200_OK
         )
-
+        print(response.json())
         self.assertEqual(
             response.json(),
             {
-                "count": 2,
+                "count": 4,
                 "next": None,
                 "previous": None,
                 "results": [
                     {
-                        "id": 18,
+                        "id": 32,
                         "place": "test",
                         "time": "12:00:00",
                         "action": "test",
@@ -331,11 +366,11 @@ class HabitAPITestCase(APITestCase):
                         "reward": None,
                         "time_for_execution": 120,
                         "is_public": False,
-                        "user": self.user.pk,
-                        "associated_habit": 17
+                        "user": 15,
+                        "associated_habit": 31
                     },
                     {
-                        "id": 17,
+                        "id": 31,
                         "place": "test",
                         "time": "12:02:00",
                         "action": "test",
@@ -344,7 +379,33 @@ class HabitAPITestCase(APITestCase):
                         "reward": None,
                         "time_for_execution": 60,
                         "is_public": False,
-                        "user": self.user.pk,
+                        "user": 15,
+                        "associated_habit": None
+                    },
+                    {
+                        "id": 34,
+                        "place": "test",
+                        "time": "12:00:00",
+                        "action": "test",
+                        "is_nice_habit": False,
+                        "periodicity": "1_day",
+                        "reward": None,
+                        "time_for_execution": 120,
+                        "is_public": False,
+                        "user": 16,
+                        "associated_habit": 33
+                    },
+                    {
+                        "id": 33,
+                        "place": "test",
+                        "time": "12:02:00",
+                        "action": "test",
+                        "is_nice_habit": True,
+                        "periodicity": "1_day",
+                        "reward": None,
+                        "time_for_execution": 60,
+                        "is_public": False,
+                        "user": 16,
                         "associated_habit": None
                     }
                 ]

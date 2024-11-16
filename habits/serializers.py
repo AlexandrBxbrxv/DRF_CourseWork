@@ -10,6 +10,7 @@ class HabitSerializer(serializers.ModelSerializer):
     class Meta:
         model = Habit
         fields = '__all__'
+        read_only_fields = ('user',)
         validators = [
             HabitValidator(is_nice_habit='is_nice_habit', associated_habit='associated_habit', reward='reward')
         ]

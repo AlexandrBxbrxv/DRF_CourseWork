@@ -184,3 +184,122 @@ class HabitAPITestCase(APITestCase):
 
         self.assertTrue(not Habit.objects.filter(pk=3).exists())
 
+    def test_create_habit_with_associated_habit_and_reward(self):
+        """Создание полезной привычки не правильно,
+         со связанной привычкой(associated_habit) и вознаграждением(reward)."""
+
+        self.client.force_authenticate(user=self.user)
+
+        data = {
+            "id": 3,
+            "place": "test",
+            "time": "12:00:00",
+            "action": "test",
+            "is_nice_habit": False,
+            "periodicity": "1_day",
+            "time_for_execution": 60,
+            "associated_habit": self.associated_habit.pk,
+            "reward": "test"
+        }
+
+        response = self.client.post(
+            '/habits/habit/create/',
+            data=data,
+            format='json'
+        )
+
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_400_BAD_REQUEST
+        )
+
+        self.assertEqual(
+            response.json(),
+            {
+                'non_field_errors': ['Привычка не может содержать и связанную привычку и вознаграждение одновременно.']
+            }
+        )
+
+        self.assertTrue(not Habit.objects.filter(pk=3).exists())
+
+    def test_create_habit_right_way(self):
+        """Создание полезной привычки по-правильному."""
+
+        self.client.force_authenticate(user=self.user)
+
+        data = {
+            "id": 10,
+            "place": "test",
+            "time": "12:00:00",
+            "action": "test",
+            "is_nice_habit": False,
+            "periodicity": "1_day",
+            "time_for_execution": 60,
+            "reward": "test"
+        }
+
+        response = self.client.post(
+            '/habits/habit/create/',
+            data=data,
+            format='json'
+        )
+
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_201_CREATED
+        )
+
+        self.assertEqual(
+            response.json(),
+            {
+                "id": 10,
+                "user": self.user.pk,
+                "place": "test",
+                "time": "12:00:00",
+                "action": "test",
+                "is_nice_habit": False,
+                "associated_habit": None,
+                "periodicity": "1_day",
+                "time_for_execution": 60,
+                "reward": "test",
+                "is_public": False
+            }
+        )
+
+        self.assertTrue(Habit.objects.filter(pk=10).exists())
+
+    def test_create_habit_time_for_execution_greater_then_120(self):
+        """Создание полезной привычки, с временем на выполнение(time_for_execution) больше 120 секунд."""
+
+        self.client.force_authenticate(user=self.user)
+
+        data = {
+            "id": 3,
+            "place": "test",
+            "time": "12:00:00",
+            "action": "test",
+            "is_nice_habit": False,
+            "periodicity": "1_day",
+            "time_for_execution": 121,
+            "reward": "test"
+        }
+
+        response = self.client.post(
+            '/habits/habit/create/',
+            data=data,
+            format='json'
+        )
+
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_400_BAD_REQUEST
+        )
+
+        self.assertEqual(
+            response.json(),
+            {
+                'non_field_errors': ['Время на выполнение не должно превышать 120 секунд.']
+            }
+        )
+
+        self.assertTrue(not Habit.objects.filter(pk=3).exists())

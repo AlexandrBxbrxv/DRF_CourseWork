@@ -4,6 +4,6 @@ from rest_framework import permissions
 class IsOwner(permissions.BasePermission):
     """Проверяет, является ли пользователь владельцем объекта."""
     def has_object_permission(self, request, view, obj):
-        if obj.owner == request.user:
+        if obj.user == request.user:
             return True
         return False

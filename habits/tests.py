@@ -344,7 +344,6 @@ class HabitAPITestCase(APITestCase):
             response.status_code,
             status.HTTP_200_OK
         )
-        print(response.json())
 
         self.assertEqual(
             response.json(),
@@ -453,3 +452,110 @@ class HabitAPITestCase(APITestCase):
                 }
             ]
         )
+
+    def test_retrieve_users_habit(self):
+        """Просмотр привычки пользователя."""
+        response = self.client.get(
+            '/habits/habit/retrieve/2/',
+            format='json'
+        )
+
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_200_OK
+        )
+
+        self.assertEqual(
+            response.json(),
+            {
+                "id": 2,
+                "user": 1,
+                "place": "test",
+                "time": "12:00:00",
+                "action": "test",
+                "is_nice_habit": False,
+                "associated_habit": 1,
+                "periodicity": "1_day",
+                "time_for_execution": 120,
+                "reward": None,
+                "is_public": False
+            }
+        )
+
+    def test_update_users_habit_to_wrong_values(self):
+        """Обновление привычки пользователя не правильно,
+         попытка добавить reward в привычку у которой есть associated_habit."""
+
+        data = {
+            "reward": "test"
+        }
+
+        response = self.client.patch(
+            '/habits/habit/update/2/',
+            data=data,
+            format='json'
+        )
+
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_400_BAD_REQUEST
+        )
+
+        self.assertEqual(
+            response.json(),
+            {
+                'non_field_errors': ['Привычка не может содержать и связанную привычку и вознаграждение одновременно.']
+            }
+        )
+
+    def test_update_users_habit(self):
+        """Обновление привычки пользователя."""
+
+        data = {
+            "time": "13:20:25",
+            "periodicity": "2_day",
+            "time_for_execution": 100,
+            "is_public": True
+        }
+
+        response = self.client.patch(
+            '/habits/habit/update/1/',
+            data=data,
+            format='json'
+        )
+
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_200_OK
+        )
+        self.assertEqual(
+            response.json(),
+            {
+                "id": 1,
+                "user": 1,
+                "place": "test",
+                "time": "13:20:25",
+                "action": "test",
+                "is_nice_habit": True,
+                "associated_habit": None,
+                "periodicity": "2_day",
+                "time_for_execution": 100,
+                "reward": None,
+                "is_public": True
+            }
+        )
+
+    def test_destroy_users_habit(self):
+        """Удаление привычки пользователя."""
+
+        response = self.client.delete(
+            '/habits/habit/destroy/2/',
+            format='json'
+        )
+
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_204_NO_CONTENT
+        )
+
+        self.assertTrue(not Habit.objects.filter(pk=2).exists())

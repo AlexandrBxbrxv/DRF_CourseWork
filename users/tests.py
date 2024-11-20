@@ -29,10 +29,11 @@ class PermissionAPITestCase(APITestCase):
             action='test',
             is_nice_habit=True,
             associated_habit=None,
-            periodicity='1_day',
+            periodicity='1',
             reward=None,
             time_for_execution=60,
-            is_public=False
+            is_public=False,
+            next_reminder='2024-11-20'
         )
 
         self.habit = Habit.objects.create(
@@ -42,10 +43,11 @@ class PermissionAPITestCase(APITestCase):
             action='test',
             is_nice_habit=False,
             associated_habit=self.associated_habit,
-            periodicity='1_day',
+            periodicity='1',
             reward=None,
             time_for_execution=120,
-            is_public=False
+            is_public=False,
+            next_reminder='2024-11-20'
         )
 
         self.other_user = User.objects.create(
@@ -60,10 +62,11 @@ class PermissionAPITestCase(APITestCase):
             action='test',
             is_nice_habit=True,
             associated_habit=None,
-            periodicity='1_day',
+            periodicity='1',
             reward=None,
             time_for_execution=60,
-            is_public=False
+            is_public=False,
+            next_reminder='2024-11-20'
         )
 
         self.other_habit = Habit.objects.create(
@@ -73,10 +76,11 @@ class PermissionAPITestCase(APITestCase):
             action='test',
             is_nice_habit=False,
             associated_habit=self.other_associated_habit,
-            periodicity='1_day',
+            periodicity='1',
             reward=None,
             time_for_execution=120,
-            is_public=False
+            is_public=False,
+            next_reminder='2024-11-20'
         )
 
         self.client = APIClient()
@@ -89,7 +93,7 @@ class PermissionAPITestCase(APITestCase):
             "time": "12:00:00",
             "action": "test",
             "is_nice_habit": True,
-            "periodicity": "1_day",
+            "periodicity": "1",
             "time_for_execution": 60
         }
 

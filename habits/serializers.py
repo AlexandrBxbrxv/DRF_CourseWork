@@ -27,4 +27,3 @@ class HabitUpdateSerializer(serializers.ModelSerializer):
         for validator in self.Meta.validators:
             if isinstance(validator, HabitValidator):
                 validator.instance = self.instance
-

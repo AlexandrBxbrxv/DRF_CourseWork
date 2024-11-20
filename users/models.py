@@ -8,6 +8,8 @@ class User(AbstractUser):
 
     email = models.EmailField(unique=True, **NULLABLE, verbose_name='email')
 
+    tg_chat_id = models.CharField(max_length=50, **NULLABLE, verbose_name='id чата телеграмма')
+
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
 

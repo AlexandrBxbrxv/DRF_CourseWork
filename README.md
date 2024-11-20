@@ -11,6 +11,7 @@ DevLog
 `v1`
 1. Добавлены библиотеки django-cors-headers, drf-yasg, redis, celery, eventlet, django-celery-beat, requests
 2. Настройка CORS, drf-yasg, celery
+3. Реализована периодическая задача отправки напоминания о привычке через ТГ бота
 
 `v0.2.1`
 1. Исправлена ошибка автоинкрементации в тестах

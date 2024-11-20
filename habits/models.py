@@ -1,4 +1,5 @@
 from django.db import models
+
 from main.models import NULLABLE
 from users.models import User
 
@@ -30,7 +31,7 @@ class Habit(models.Model):
                                                           verbose_name='время на выполнение')
     is_public = models.BooleanField(default=False, verbose_name='признак публичности')
 
-    next_reminder = models.DateTimeField(**NULLABLE, auto_now=True, verbose_name='дата следующего напоминания')
+    next_reminder = models.DateField(**NULLABLE, auto_now=True, verbose_name='дата следующего напоминания')
 
     def __str__(self):
         return f'Привычка {self.user}'

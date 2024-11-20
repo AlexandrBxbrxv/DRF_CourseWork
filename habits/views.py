@@ -3,7 +3,7 @@ from rest_framework.permissions import IsAuthenticated
 
 from habits.models import Habit
 from habits.paginators import HabitPaginator
-from habits.serializers import HabitSerializer
+from habits.serializers import HabitSerializer, HabitUpdateSerializer
 from users.permissions import IsOwner
 
 
@@ -23,7 +23,7 @@ class HabitCreateAPIView(generics.CreateAPIView):
 class AllHabitListAPIView(generics.ListAPIView):
     """Контроллер для просмотра привычек всех пользователей."""
     serializer_class = HabitSerializer
-    queryset = Habit.objects.all()
+    queryset = Habit.objects.filter(is_public=True)
 
 
 class HabitListAPIView(generics.ListAPIView):
@@ -46,7 +46,7 @@ class HabitRetrieveAPIView(generics.RetrieveAPIView):
 
 class HabitUpdateAPIView(generics.UpdateAPIView):
     """Контроллер для обновления привычки текущего пользователя."""
-    serializer_class = HabitSerializer
+    serializer_class = HabitUpdateSerializer
     queryset = Habit.objects.all()
     permission_classes = [IsAuthenticated, IsOwner]
 

@@ -9,7 +9,7 @@
 DevLog
 
 `v1`
-1. Добавлены библиотеки django-cors-headers, drf-yasg, redis, celery, eventlet, django-celery-beat
+1. Добавлены библиотеки django-cors-headers, drf-yasg, redis, celery, eventlet, django-celery-beat, requests
 2. Настройка CORS, drf-yasg, celery
 
 `v0.2.1`

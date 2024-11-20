@@ -23,7 +23,7 @@ class HabitCreateAPIView(generics.CreateAPIView):
 class AllHabitListAPIView(generics.ListAPIView):
     """Контроллер для просмотра привычек всех пользователей."""
     serializer_class = HabitSerializer
-    queryset = Habit.objects.all()
+    queryset = Habit.objects.filter(is_public=True)
 
 
 class HabitListAPIView(generics.ListAPIView):

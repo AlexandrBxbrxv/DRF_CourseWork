@@ -4,6 +4,11 @@
 
 Заполните ".env.sample" своими данными и переименуйте его в ".env"
 
+Для запуска периодических задач:
+Запустите redis-server, пропишите в консоль: 
+celery -A config worker -l INFO -P eventlet
+celery -A config beat -l INFO
+
 Для запуска сайта: python manage.py runserver
 
 DevLog

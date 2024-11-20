@@ -150,3 +150,7 @@ CELERY_BEAT_SCHEDULE = {
         'schedule': timedelta(days=1),
     },
 }
+
+
+TG_API_URL = os.getenv('TG_API_URL')
+TG_API_TOKEN = os.getenv('TG_API_TOKEN')

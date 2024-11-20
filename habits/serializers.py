@@ -10,7 +10,7 @@ class HabitSerializer(serializers.ModelSerializer):
     class Meta:
         model = Habit
         fields = '__all__'
-        read_only_fields = ('user',)
+        read_only_fields = ('user', 'next_reminder',)
         validators = [HabitValidator()]
 
 
@@ -19,7 +19,7 @@ class HabitUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Habit
         fields = '__all__'
-        read_only_fields = ('user',)
+        read_only_fields = ('user', 'next_reminder',)
         validators = [HabitValidator()]
 
     def __init__(self, *args, **kwargs):

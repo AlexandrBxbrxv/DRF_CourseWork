@@ -14,7 +14,6 @@ class HabitAPITestCase(APITestCase):
             cursor.execute("ALTER SEQUENCE habits_habit_id_seq RESTART WITH 1;")
 
     def setUp(self) -> None:
-
         self.reset_sequence()
 
         self.user = User.objects.create(
@@ -29,10 +28,12 @@ class HabitAPITestCase(APITestCase):
             action='test',
             is_nice_habit=True,
             associated_habit=None,
-            periodicity='1_day',
+            periodicity='1',
             reward=None,
             time_for_execution=60,
-            is_public=False
+            is_public=False,
+            next_reminder='2024-11-20'
+
         )
 
         self.habit = Habit.objects.create(
@@ -42,10 +43,12 @@ class HabitAPITestCase(APITestCase):
             action='test',
             is_nice_habit=False,
             associated_habit=self.associated_habit,
-            periodicity='1_day',
+            periodicity='1',
             reward=None,
             time_for_execution=120,
-            is_public=False
+            is_public=False,
+            next_reminder='2024-11-20'
+
         )
 
         self.other_user = User.objects.create(
@@ -60,10 +63,12 @@ class HabitAPITestCase(APITestCase):
             action='test',
             is_nice_habit=True,
             associated_habit=None,
-            periodicity='1_day',
+            periodicity='1',
             reward=None,
             time_for_execution=60,
-            is_public=True
+            is_public=True,
+            next_reminder='2024-11-20'
+
         )
 
         self.other_habit = Habit.objects.create(
@@ -73,10 +78,12 @@ class HabitAPITestCase(APITestCase):
             action='test',
             is_nice_habit=False,
             associated_habit=self.other_associated_habit,
-            periodicity='1_day',
+            periodicity='1',
             reward=None,
             time_for_execution=120,
-            is_public=True
+            is_public=True,
+            next_reminder='2024-11-20'
+
         )
 
         self.client = APIClient()
@@ -91,7 +98,7 @@ class HabitAPITestCase(APITestCase):
             "time": "12:00:00",
             "action": "test",
             "is_nice_habit": True,
-            "periodicity": "1_day",
+            "periodicity": "1",
             "time_for_execution": 60
         }
 
@@ -116,10 +123,11 @@ class HabitAPITestCase(APITestCase):
                 "action": "test",
                 "is_nice_habit": True,
                 "associated_habit": None,
-                "periodicity": "1_day",
+                "periodicity": "1",
                 "time_for_execution": 60,
                 "reward": None,
-                "is_public": False
+                "is_public": False,
+                'next_reminder': '2024-11-20'
             }
         )
 
@@ -134,7 +142,7 @@ class HabitAPITestCase(APITestCase):
             "time": "12:00:00",
             "action": "test",
             "is_nice_habit": True,
-            "periodicity": "1_day",
+            "periodicity": "1",
             "time_for_execution": 60,
             "reward": "test",
         }
@@ -168,7 +176,7 @@ class HabitAPITestCase(APITestCase):
             "time": "12:00:00",
             "action": "test",
             "is_nice_habit": True,
-            "periodicity": "1_day",
+            "periodicity": "1",
             "time_for_execution": 60,
             "associated_habit": self.associated_habit.pk,
         }
@@ -203,7 +211,7 @@ class HabitAPITestCase(APITestCase):
             "time": "12:00:00",
             "action": "test",
             "is_nice_habit": False,
-            "periodicity": "1_day",
+            "periodicity": "1",
             "time_for_execution": 60,
             "associated_habit": self.associated_habit.pk,
             "reward": "test"
@@ -237,7 +245,7 @@ class HabitAPITestCase(APITestCase):
             "time": "12:00:00",
             "action": "test",
             "is_nice_habit": False,
-            "periodicity": "1_day",
+            "periodicity": "1",
             "time_for_execution": 60,
             "reward": "test"
         }
@@ -263,10 +271,11 @@ class HabitAPITestCase(APITestCase):
                 "action": "test",
                 "is_nice_habit": False,
                 "associated_habit": None,
-                "periodicity": "1_day",
+                "periodicity": "1",
                 "time_for_execution": 60,
                 "reward": "test",
-                "is_public": False
+                "is_public": False,
+                "next_reminder": "2024-11-20"
             }
         )
 
@@ -281,7 +290,7 @@ class HabitAPITestCase(APITestCase):
             "time": "12:00:00",
             "action": "test",
             "is_nice_habit": False,
-            "periodicity": "1_day",
+            "periodicity": "1",
             "time_for_execution": 121,
             "reward": "test"
         }
@@ -315,7 +324,7 @@ class HabitAPITestCase(APITestCase):
             "time": "12:00:00",
             "action": "test",
             "is_nice_habit": False,
-            "periodicity": "1_day",
+            "periodicity": "1",
             "time_for_execution": 120,
             "associated_habit": self.habit.pk
         }
@@ -366,12 +375,13 @@ class HabitAPITestCase(APITestCase):
                         "time": "12:00:00",
                         "action": "test",
                         "is_nice_habit": False,
-                        "periodicity": "1_day",
+                        "periodicity": "1",
                         "reward": None,
                         "time_for_execution": 120,
                         "is_public": False,
                         "user": 1,
-                        "associated_habit": 1
+                        "associated_habit": 1,
+                        "next_reminder": "2024-11-20"
                     },
                     {
                         "id": 1,
@@ -379,12 +389,13 @@ class HabitAPITestCase(APITestCase):
                         "time": "12:02:00",
                         "action": "test",
                         "is_nice_habit": True,
-                        "periodicity": "1_day",
+                        "periodicity": "1",
                         "reward": None,
                         "time_for_execution": 60,
                         "is_public": False,
                         "user": 1,
-                        "associated_habit": None
+                        "associated_habit": None,
+                        "next_reminder": "2024-11-20"
                     }
                 ]
             }
@@ -412,12 +423,13 @@ class HabitAPITestCase(APITestCase):
                     "time": "12:00:00",
                     "action": "test",
                     "is_nice_habit": False,
-                    "periodicity": "1_day",
+                    "periodicity": "1",
                     "reward": None,
                     "time_for_execution": 120,
                     "is_public": True,
                     "user": 2,
-                    "associated_habit": 3
+                    "associated_habit": 3,
+                    "next_reminder": "2024-11-20"
                 },
                 {
                     "id": 3,
@@ -425,12 +437,13 @@ class HabitAPITestCase(APITestCase):
                     "time": "12:02:00",
                     "action": "test",
                     "is_nice_habit": True,
-                    "periodicity": "1_day",
+                    "periodicity": "1",
                     "reward": None,
                     "time_for_execution": 60,
                     "is_public": True,
                     "user": 2,
-                    "associated_habit": None
+                    "associated_habit": None,
+                    "next_reminder": "2024-11-20"
                 }
             ]
         )
@@ -457,10 +470,11 @@ class HabitAPITestCase(APITestCase):
                 "action": "test",
                 "is_nice_habit": False,
                 "associated_habit": 1,
-                "periodicity": "1_day",
+                "periodicity": "1",
                 "time_for_execution": 120,
                 "reward": None,
-                "is_public": False
+                "is_public": False,
+                "next_reminder": "2024-11-20"
             }
         )
 
@@ -495,7 +509,7 @@ class HabitAPITestCase(APITestCase):
 
         data = {
             "time": "13:20:25",
-            "periodicity": "2_day",
+            "periodicity": "2",
             "time_for_execution": 100,
             "is_public": True
         }
@@ -520,10 +534,11 @@ class HabitAPITestCase(APITestCase):
                 "action": "test",
                 "is_nice_habit": True,
                 "associated_habit": None,
-                "periodicity": "2_day",
+                "periodicity": "2",
                 "time_for_execution": 100,
                 "reward": None,
-                "is_public": True
+                "is_public": True,
+                "next_reminder": "2024-11-20"
             }
         )
 

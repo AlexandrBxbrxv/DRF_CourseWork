@@ -29,7 +29,6 @@ class AllHabitListAPIView(generics.ListAPIView):
 class HabitListAPIView(generics.ListAPIView):
     """Контроллер для просмотра привычек текущего пользователя."""
     serializer_class = HabitSerializer
-    permission_classes = [IsAuthenticated, IsOwner]
     pagination_class = HabitPaginator
 
     def get_queryset(self):

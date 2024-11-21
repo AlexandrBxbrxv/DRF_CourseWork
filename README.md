@@ -13,6 +13,10 @@ celery -A config beat -l INFO
 
 DevLog
 
+`v1.0.1`
+1. Исправлена ошибка не верной даты в тестах
+2. Из контроллера HabitListAPIView удалено ограничение доступа IsOwner
+
 `v1`
 1. Добавлены библиотеки django-cors-headers, drf-yasg, redis, celery, eventlet, django-celery-beat, requests
 2. Настройка CORS, drf-yasg, celery

@@ -1,4 +1,5 @@
 from django.db import connection
+from django.utils import timezone
 from rest_framework import status
 from rest_framework.test import APITestCase, APIClient
 
@@ -16,6 +17,8 @@ class HabitAPITestCase(APITestCase):
     def setUp(self) -> None:
         self.reset_sequence()
 
+        self.today = timezone.now().today().date().strftime('%Y-%m-%d')
+
         self.user = User.objects.create(
             email='user@test.com',
             password='test'
@@ -32,8 +35,6 @@ class HabitAPITestCase(APITestCase):
             reward=None,
             time_for_execution=60,
             is_public=False,
-            next_reminder='2024-11-20'
-
         )
 
         self.habit = Habit.objects.create(
@@ -47,8 +48,6 @@ class HabitAPITestCase(APITestCase):
             reward=None,
             time_for_execution=120,
             is_public=False,
-            next_reminder='2024-11-20'
-
         )
 
         self.other_user = User.objects.create(
@@ -67,8 +66,6 @@ class HabitAPITestCase(APITestCase):
             reward=None,
             time_for_execution=60,
             is_public=True,
-            next_reminder='2024-11-20'
-
         )
 
         self.other_habit = Habit.objects.create(
@@ -82,8 +79,6 @@ class HabitAPITestCase(APITestCase):
             reward=None,
             time_for_execution=120,
             is_public=True,
-            next_reminder='2024-11-20'
-
         )
 
         self.client = APIClient()
@@ -127,7 +122,7 @@ class HabitAPITestCase(APITestCase):
                 "time_for_execution": 60,
                 "reward": None,
                 "is_public": False,
-                'next_reminder': '2024-11-20'
+                'next_reminder': self.today
             }
         )
 
@@ -275,7 +270,7 @@ class HabitAPITestCase(APITestCase):
                 "time_for_execution": 60,
                 "reward": "test",
                 "is_public": False,
-                "next_reminder": "2024-11-20"
+                "next_reminder": self.today
             }
         )
 
@@ -381,7 +376,7 @@ class HabitAPITestCase(APITestCase):
                         "is_public": False,
                         "user": 1,
                         "associated_habit": 1,
-                        "next_reminder": "2024-11-20"
+                        "next_reminder": self.today
                     },
                     {
                         "id": 1,
@@ -395,7 +390,7 @@ class HabitAPITestCase(APITestCase):
                         "is_public": False,
                         "user": 1,
                         "associated_habit": None,
-                        "next_reminder": "2024-11-20"
+                        "next_reminder": self.today
                     }
                 ]
             }
@@ -429,7 +424,7 @@ class HabitAPITestCase(APITestCase):
                     "is_public": True,
                     "user": 2,
                     "associated_habit": 3,
-                    "next_reminder": "2024-11-20"
+                    "next_reminder": self.today
                 },
                 {
                     "id": 3,
@@ -443,7 +438,7 @@ class HabitAPITestCase(APITestCase):
                     "is_public": True,
                     "user": 2,
                     "associated_habit": None,
-                    "next_reminder": "2024-11-20"
+                    "next_reminder": self.today
                 }
             ]
         )
@@ -474,7 +469,7 @@ class HabitAPITestCase(APITestCase):
                 "time_for_execution": 120,
                 "reward": None,
                 "is_public": False,
-                "next_reminder": "2024-11-20"
+                "next_reminder": self.today
             }
         )
 
@@ -538,7 +533,7 @@ class HabitAPITestCase(APITestCase):
                 "time_for_execution": 100,
                 "reward": None,
                 "is_public": True,
-                "next_reminder": "2024-11-20"
+                "next_reminder": self.today
             }
         )
 

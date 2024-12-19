@@ -2,10 +2,14 @@
 
 ### Запуск
 Заполните ".env.sample" своими данными и переименуйте его в ".env"\
-В консоль пропишите из папки проекта DRF_Homework>`docker-compose build`\
-После загрузки пропишите DRF_Homework>`docker-compose up`
+Для запуска проекта через докер пропишите из папки проекта DRF_Homework>`docker-compose up -d --build`\
+Чтобы запустить проект на удаленном сервере, загрузите проект на GitLab, клонируйте проект на сервер, на сервере пропишите `docker-compose up -d --build`
 
 DevLog
+
+_v1.2_
+1. Оформлен .gitlab-ci.yml
+2. Оформлен deploy.sh
 
 _v1.1_
 1. Оформлен Dockerfile
